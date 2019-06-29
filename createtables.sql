@@ -1,4 +1,4 @@
-drop schema public cascade;
+﻿drop schema public cascade;
 
 create schema public;
 
@@ -297,7 +297,7 @@ create table docente_ies (
 
     CO_DOCENTE_IES integer,
     TP_SITUACAO integer,
-    TP_REGIME_TRABALHO integer,
+    TP_REGIME_TRABALHO integer
 );
 
 create table ocde(
@@ -310,6 +310,5 @@ create table ocde(
     NO_OCDE_AREA_ESPECIFICA varchar(44),
     CO_OCDE_AREA_DETALHADA integer,
     NO_OCDE_AREA_DETALHADA varchar(64),
-    NO_OCDE varchar(83)
+    NO_OCDE varchar(86)
 );
-
