@@ -6,8 +6,60 @@ create table municipio (
     CO_MUNICIPIO integer,
     primary key(CO_MUNICIPIO),
 
+    CO_REGIAO integer,
     CO_UF integer,
     IN_CAPITAL boolean
+);
+
+create table ies (
+    CO_IES integer,
+    primary key(CO_IES),
+
+    NO_IES varchar(200),
+    SG_IES varchar(20),
+    CO_MANTENEDORA integer,
+    NO_MANTENEDORA varchar(200),
+    TP_CATEGORIA_ADMINISTRATIVA integer,
+    TP_ORGANIZACAO_ACADEMICA integer,
+
+    CO_MUNICIPIO integer,
+    foreign key (CO_MUNICIPIO) references municipio (CO_MUNICIPIO),
+
+    QT_TEC_TOTAL integer,
+    QT_TEC_FUNDAMENTAL_INCOMP_FEM integer,
+    QT_TEC_FUNDAMENTAL_INCOMP_MASC integer,
+    QT_TEC_FUNDAMENTAL_COMP_FEM integer,
+    QT_TEC_FUNDAMENTAL_COMP_MASC integer,
+    QT_TEC_MEDIO_FEM integer,
+    QT_TEC_MEDIO_MASC integer,
+    QT_TEC_SUPERIOR_FEM integer,
+    QT_TEC_SUPERIOR_MASC integer,
+    QT_TEC_ESPECIALIZACAO_FEM integer,
+    QT_TEC_ESPECIALIZACAO_MASC integer,
+    QT_TEC_MESTRADO_FEM integer,
+    QT_TEC_MESTRADO_MASC integer,
+    QT_TEC_DOUTORADO_FEM integer,
+    QT_TEC_DOUTORADO_MASC integer,
+    IN_ACESSO_PORTAL_CAPES boolean,
+    IN_ACESSO_OUTRAS_BASES boolean,
+    IN_REPOSITORIO_INSTITUCIONAL boolean,
+    IN_BUSCA_INTEGRADA boolean,
+    IN_SERVICO_INTERNET boolean,
+    IN_PARTICIPA_REDE_SOCIAL boolean,
+    IN_CATALOGO_ONLINE boolean,
+    QT_PERIODICO_ELETRONICO integer,
+    QT_LIVRO_ELETRONICO integer,
+    TP_REFERENTE integer,
+    VL_RECEITA_PROPRIA float,
+    VL_RECEITA_TRANSFERENCIA float,
+    VL_RECEITA_OUTRA float,
+    VL_DESPESA_PESSOAL_DOCENTE float,
+    VL_DESPESA_PESSOAL_TECNICO float,
+    VL_DESPESA_PESSOAL_ENCARGO float,
+    VL_DESPESA_CUSTEIO float,
+    VL_DESPESA_INVESTIMENTO float,
+    VL_DESPESA_PESQUISA float,
+    VL_DESPESA_OUTRA float
 );
 
 create table docente (
