@@ -2,12 +2,27 @@
 
 create schema public;
 
+create table regiao (
+    CO_REGIAO integer primary key
+);
+
+create table uf (
+    CO_UF integer,
+    primary key(CO_UF),
+
+    CO_REGIAO integer,
+
+    foreign key (CO_REGIAO) references regiao
+);
+
 create table municipio (
     CO_MUNICIPIO integer,
     primary key(CO_MUNICIPIO),
 
     CO_UF integer,
-    IN_CAPITAL boolean
+    IN_CAPITAL boolean,
+
+    foreign key (CO_UF) references uf
 );
 
 create table docente (
