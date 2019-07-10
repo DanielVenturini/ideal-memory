@@ -1,5 +1,4 @@
 ﻿drop schema public cascade;
-
 create schema public;
 
 create table regiao (
@@ -8,22 +7,21 @@ create table regiao (
 
 create table uf (
     CO_UF integer,
-    primary key(CO_UF),
-
     CO_REGIAO integer,
 
-    foreign key (CO_REGIAO) references regiao
+    primary key(CO_UF, CO_REGIAO),
+    foreign key (CO_REGIAO) references regiao ON DELETE CASCADE
 );
 
 create table municipio (
     CO_MUNICIPIO integer,
-    primary key(CO_MUNICIPIO),
+    primary key(CO_MUNICIPIO, CO_REGIAO, CO_UF),
 
     CO_REGIAO integer,
     CO_UF integer,
     IN_CAPITAL boolean,
 
-    foreign key (CO_UF) references uf
+    foreign key (CO_UF, CO_REGIAO) references uf ON DELETE CASCADE
 );
 
 create table ies (
@@ -79,7 +77,9 @@ create table ies (
 
 create table docente (
     CO_MUNICIPIO_NASCIMENTO integer,
-    foreign key (CO_MUNICIPIO_NASCIMENTO) references municipio (CO_MUNICIPIO),
+    CO_REGIAO integer,
+    CO_UF integer,
+    foreign key (CO_MUNICIPIO_NASCIMENTO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
 
     CO_DOCENTE bigint,
     primary key (CO_DOCENTE),
@@ -367,6 +367,8 @@ create table docente_ies (
     TP_REGIME_TRABALHO integer
 );
 
+---------------------------------------------------------OCDE---------------------------------------------------------------------
+
 CREATE TABLE OCDE_AREA_GERAL (
    co_ocde_area_geral CHAR(1) PRIMARY KEY,
    no_ocde_area_geral VARCHAR(36)
@@ -404,22 +406,43 @@ CREATE TABLE OCDE_TEMP (
   NO_OCDE VARCHAR(83)
 );
 
---COPY OCDE_TEMP FROM '/home/venturini/microdados/DADOS/TB_AUX_AREA_OCDE.CSV' USING delimiters '|' CSV HEADER NULL AS ''  encoding 'latin1';
-
+------------------------------------------INSERINDO VALORES----------------------------------------------
+----------------------------OCDE-------------------------------
 INSERT INTO OCDE_AREA_GERAL( CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL)
-SELECT DISTINCT CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL FROM OCDE_TEMP
+SELECT DISTINCT CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL FROM ocde_temp
 ORDER BY CO_OCDE_AREA_GERAL;
 
 INSERT INTO OCDE_AREA_ESPECIFICA(CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL)
-SELECT DISTINCT CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL FROM OCDE_TEMP
+SELECT DISTINCT CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL FROM ocde_temp
 ORDER BY CO_OCDE_AREA_ESPECIFICA;
 
 INSERT INTO OCDE_AREA_DETALHADA(CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA )
-SELECT DISTINCT CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA FROM OCDE_TEMP
+SELECT DISTINCT CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA FROM ocde_temp
 ORDER BY CO_OCDE_AREA_ESPECIFICA;
 
 INSERT INTO OCDE(CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO)
-SELECT DISTINCT CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO FROM OCDE_TEMP
+SELECT DISTINCT CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO FROM ocde_temp
 ORDER BY CO_OCDE;
 
-DROP TABLE OCDE_TEMP
+------------------------REGIAO, UF e MUNICIPIO-------------------------------
+insert into regiao values (1),(2),(3),(4),(5);
+
+INSERT INTO uf ( CO_UF, CO_REGIAO)
+SELECT DISTINCT CO_UF, CO_REGIAO FROM ies_temp;
+
+create table aux_insert_municipio (
+    id serial primary key,
+    CO_MUNICIPIO integer,
+    CO_UF integer,
+    IN_CAPITAL boolean,
+    CO_REGIAO integer
+);
+
+--INSERT INTO aux_insert_municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL)
+--            SELECT DISTINCT CO_MUNICIPIO, CO_UF, cast(IN_CAPITAL AS boolean) AS boolean FROM [ies_temp, curso_temp, local_oferta_temp];
+
+--update aux_insert_municipio as ax SET co_regiao = (select co_regiao from uf as u where u.co_uf = ax.co_uf);
+
+--INSERT INTO municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO)
+--            SELECT DISTINCT CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO FROM aux_insert_municipio;
+
