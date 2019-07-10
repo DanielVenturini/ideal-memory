@@ -35,8 +35,10 @@ create table ies (
     TP_CATEGORIA_ADMINISTRATIVA integer,
     TP_ORGANIZACAO_ACADEMICA integer,
 
-    CO_MUNICIPIO integer,
-    foreign key (CO_MUNICIPIO) references municipio (CO_MUNICIPIO),
+    CO_MUNICIPIO_NASCIMENTO integer,
+    CO_REGIAO integer,
+    CO_UF integer,
+    foreign key (CO_MUNICIPIO_NASCIMENTO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
 
     QT_TEC_TOTAL integer,
     QT_TEC_FUNDAMENTAL_INCOMP_FEM integer,
@@ -84,7 +86,6 @@ create table docente (
     CO_DOCENTE bigint,
     primary key (CO_DOCENTE),
 
-    TP_ESCOLARIDADE integer,
     TP_SEXO integer,
     NU_ANO_NASCIMENTO integer,
     NU_MES_NASCIMENTO integer,
@@ -101,7 +102,20 @@ create table docente (
     IN_DEFICIENCIA_FISICA boolean,
     IN_DEFICIENCIA_SURDOCEGUEIRA boolean,
     IN_DEFICIENCIA_MULTIPLA boolean,
-    IN_DEFICIENCIA_INTELECTUAL boolean,
+    IN_DEFICIENCIA_INTELECTUAL boolean
+);
+
+create table docente_ies (
+    CO_DOCENTE bigint,
+    foreign key(CO_DOCENTE) references docente(CO_DOCENTE),
+
+    CO_IES integer,
+    foreign key (CO_IES) references ies(CO_IES),
+
+    CO_DOCENTE_IES bigint primary key,
+    TP_ESCOLARIDADE integer,
+    TP_SITUACAO integer,
+    TP_REGIME_TRABALHO integer,
     IN_ATUACAO_EAD boolean,
     IN_ATUACAO_EXTENSAO boolean,
     IN_ATUACAO_GESTAO boolean ,
@@ -353,18 +367,6 @@ create table aluno_curso (
     IN_MICROCOMPUTADOR boolean,
     IN_POSSUI_INTERNET_BANDA_LARGA boolean,
     IN_SALA_ATENDIMENTO_TUTOR boolean
-);
-
-create table docente_ies (
-    CO_DOCENTE bigint,
-    foreign key(CO_DOCENTE) references docente(CO_DOCENTE),
-
-    CO_IES integer,
-    foreign key (CO_IES) references ies(CO_IES),
-
-    CO_DOCENTE_IES integer,
-    TP_SITUACAO integer,
-    TP_REGIME_TRABALHO integer
 );
 
 ---------------------------------------------------------OCDE---------------------------------------------------------------------
