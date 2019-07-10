@@ -1,3 +1,54 @@
+insert into regiao values (1),(2),(3),(4),(5);
+
+INSERT INTO uf ( CO_UF, CO_REGIAO)
+SELECT DISTINCT CO_UF, CO_REGIAO FROM ies_temp;
+
+create table aux_insert_municipio (
+    id serial primary key,
+    CO_MUNICIPIO integer,
+    CO_UF integer,
+    IN_CAPITAL boolean,
+    CO_REGIAO integer
+);
+
+--INSERT INTO aux_insert_municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL)
+--            SELECT DISTINCT CO_MUNICIPIO, CO_UF, cast(IN_CAPITAL AS boolean) AS boolean FROM [ies_temp, curso_temp, local_oferta_temp];
+
+--update aux_insert_municipio as ax SET co_regiao = (select co_regiao from uf as u where u.co_uf = ax.co_uf);
+
+--INSERT INTO municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO)
+--            SELECT DISTINCT CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO FROM aux_insert_municipio;
+
+
+
+CREATE TABLE OCDE_TEMP (
+  NU_ANO_CENSO SMALLINT,
+  CO_OCDE_AREA_GERAL CHAR(1),
+  NO_OCDE_AREA_GERAL VARCHAR(36),
+  CO_OCDE_AREA_ESPECIFICA CHAR(2),
+  NO_OCDE_AREA_ESPECIFICA VARCHAR(44),
+  CO_OCDE_AREA_DETALHADA CHAR(3),
+  NO_OCDE_AREA_DETALHADA VARCHAR(64),
+  CO_OCDE CHAR(6),
+  NO_OCDE VARCHAR(83)
+);
+
+INSERT INTO OCDE_AREA_GERAL( CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL)
+SELECT DISTINCT CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL FROM ocde_temp
+ORDER BY CO_OCDE_AREA_GERAL;
+
+INSERT INTO OCDE_AREA_ESPECIFICA(CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL)
+SELECT DISTINCT CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL FROM ocde_temp
+ORDER BY CO_OCDE_AREA_ESPECIFICA;
+
+INSERT INTO OCDE_AREA_DETALHADA(CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA )
+SELECT DISTINCT CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA FROM ocde_temp
+ORDER BY CO_OCDE_AREA_ESPECIFICA;
+
+INSERT INTO OCDE(CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO)
+SELECT DISTINCT CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO FROM ocde_temp
+ORDER BY CO_OCDE;
+
 create table ies_temp (
     NU_ANO_CENSO varchar(4),
     CO_IES integer,
@@ -393,6 +444,121 @@ create table docente_temp (
     IN_EXERCICIO_DATA_REFERENCIA boolean,
     IN_VISITANTE boolean,
     TP_VISITANTE_IFES_VINCULO integer
+);
+
+create table aluno_temp (
+
+    NU_ANO_CENSO integer,
+    CO_IES integer,
+    TP_CATEGORIA_ADMINISTRATIVA integer,
+    TP_ORGANIZACAO_ACADEMICA integer,
+    CO_CURSO integer,
+    CO_CURSO_POLO integer,
+    TP_TURNO integer,
+    TP_GRAU_ACADEMICO integer,
+    TP_MODALIDADE_ENSINO integer,
+    TP_NIVEL_ACADEMICO integer,
+    CO_OCDE_AREA_GERAL varchar(1),
+    CO_OCDE_AREA_ESPECIFICA varchar(2),
+    CO_OCDE_AREA_DETALHADA varchar(3),
+    CO_OCDE varchar(6),
+    CO_ALUNO bigint,
+
+    CO_ALUNO_CURSO integer,
+    primary key(CO_ALUNO_CURSO),
+
+    CO_ALUNO_CURSO_ORIGEM integer,
+    TP_COR_RACA integer,
+    TP_SEXO integer,
+    NU_ANO_NASCIMENTO integer,
+    NU_MES_NASCIMENTO integer,
+    NU_DIA_NASCIMENTO integer,
+    NU_IDADE integer,
+    TP_NACIONALIDADE integer,
+    CO_PAIS_ORIGEM integer,
+    CO_UF_NASCIMENTO integer,
+    CO_MUNICIPIO_NASCIMENTO integer,
+    TP_DEFICIENCIA integer,
+    IN_DEFICIENCIA_AUDITIVA boolean,
+    IN_DEFICIENCIA_FISICA boolean,
+    IN_DEFICIENCIA_INTELECTUAL boolean,
+    IN_DEFICIENCIA_MULTIPLA boolean,
+    IN_DEFICIENCIA_SURDEZ boolean,
+    IN_DEFICIENCIA_SURDOCEGUEIRA boolean,
+    IN_DEFICIENCIA_BAIXA_VISAO boolean,
+    IN_DEFICIENCIA_CEGUEIRA boolean,
+    IN_DEFICIENCIA_SUPERDOTACAO boolean,
+    IN_TGD_AUTISMO_INFANTIL boolean,
+    IN_TGD_SINDROME_ASPERGER boolean,
+    IN_TGD_SINDROME_RETT boolean,
+    IN_TGD_TRANSTOR_DESINTEGRATIVO boolean,
+    TP_SITUACAO integer,
+    QT_CARGA_HORARIA_TOTAL integer,
+    QT_CARGA_HORARIA_INTEG integer,
+    DT_INGRESSO_CURSO varchar(10),
+    IN_INGRESSO_VESTIBULAR boolean,
+    IN_INGRESSO_ENEM boolean,
+    IN_INGRESSO_AVALIACAO_SERIADA boolean,
+    IN_INGRESSO_SELECAO_SIMPLIFICA boolean,
+    IN_INGRESSO_OUTRO_TIPO_SELECAO boolean,
+    IN_INGRESSO_VAGA_REMANESC boolean,
+    IN_INGRESSO_VAGA_PROG_ESPECIAL boolean,
+    IN_INGRESSO_TRANSF_EXOFFICIO boolean,
+    IN_INGRESSO_DECISAO_JUDICIAL boolean,
+    IN_INGRESSO_CONVENIO_PECG boolean,
+    IN_INGRESSO_EGRESSO boolean,
+    IN_INGRESSO_OUTRA_FORMA boolean,
+    IN_RESERVA_VAGAS boolean,
+    IN_RESERVA_ETNICO boolean,
+    IN_RESERVA_DEFICIENCIA boolean,
+    IN_RESERVA_ENSINO_PUBLICO boolean,
+    IN_RESERVA_RENDA_FAMILIAR boolean,
+    IN_RESERVA_OUTRA boolean,
+    IN_FINANCIAMENTO_ESTUDANTIL boolean,
+    IN_FIN_REEMB_FIES boolean,
+    IN_FIN_REEMB_ESTADUAL boolean,
+    IN_FIN_REEMB_MUNICIPAL boolean,
+    IN_FIN_REEMB_PROG_IES boolean,
+    IN_FIN_REEMB_ENT_EXTERNA boolean,
+    IN_FIN_REEMB_OUTRA boolean,
+    IN_FIN_NAOREEMB_PROUNI_INTEGR boolean,
+    IN_FIN_NAOREEMB_PROUNI_PARCIAL boolean,
+    IN_FIN_NAOREEMB_ESTADUAL boolean,
+    IN_FIN_NAOREEMB_MUNICIPAL boolean,
+    IN_FIN_NAOREEMB_PROG_IES boolean,
+    IN_FIN_NAOREEMB_ENT_EXTERNA boolean,
+    IN_FIN_NAOREEMB_OUTRA boolean,
+    IN_APOIO_SOCIAL boolean,
+    IN_APOIO_ALIMENTACAO boolean,
+    IN_APOIO_BOLSA_PERMANENCIA boolean,
+    IN_APOIO_BOLSA_TRABALHO boolean,
+    IN_APOIO_MATERIAL_DIDATICO boolean,
+    IN_APOIO_MORADIA boolean,
+    IN_APOIO_TRANSPORTE boolean,
+    IN_ATIVIDADE_EXTRACURRICULAR boolean,
+    IN_COMPLEMENTAR_ESTAGIO boolean,
+    IN_COMPLEMENTAR_EXTENSAO boolean,
+    IN_COMPLEMENTAR_MONITORIA boolean,
+    IN_COMPLEMENTAR_PESQUISA boolean,
+    IN_BOLSA_ESTAGIO boolean,
+    IN_BOLSA_EXTENSAO boolean,
+    IN_BOLSA_MONITORIA boolean,
+    IN_BOLSA_PESQUISA boolean,
+    TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer,
+    IN_ALUNO_PARFOR boolean,
+    TP_SEMESTRE_CONCLUSAO integer,
+    TP_SEMESTRE_REFERENCIA integer,
+    IN_MOBILIDADE_ACADEMICA boolean,
+    TP_MOBILIDADE_ACADEMICA integer,
+    TP_MOBILIDADE_ACADEMICA_INTERN integer,
+    CO_IES_DESTINO integer,
+    CO_PAIS_DESTINO integer,
+    IN_MATRICULA boolean,
+    IN_CONCLUINTE boolean,
+    IN_INGRESSO_TOTAL boolean,
+    IN_INGRESSO_VAGA_NOVA boolean,
+    IN_INGRESSO_PROCESSO_SELETIVO boolean,
+    NU_ANO_INGRESSO integer
 );
 
 COPY ies_temp FROM '/home/luiz/Downloads/Microdados_Educacao_Superior_2017/DADOS/DM_IES.CSV' USING delimiters '|' CSV HEADER NULL AS ''  encoding 'latin1';
@@ -914,7 +1080,7 @@ INSERT INTO aluno (
     IN_TGD_SINDROME_ASPERGER,
     IN_TGD_SINDROME_RETT,
     IN_TGD_TRANSTOR_DESINTEGRATIVO
-from aux_aluno;
+from aluno_temp;
 
 update aluno as a SET co_regiao = (select co_regiao from uf as u where u.co_municipio = a.co_municipio_nascimento);
 
@@ -976,4 +1142,4 @@ update aluno as a SET co_regiao = (select co_regiao from uf as u where u.co_muni
     IN_MOBILIDADE_ACADEMICA,
     TP_MOBILIDADE_ACADEMICA,
     TP_MOBILIDADE_ACADEMICA_INTERN,
-FROM aux_aluno;
+FROM aluno_temp;

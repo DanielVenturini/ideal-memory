@@ -1,7 +1,4 @@
-﻿drop schema public cascade;
-create schema public;
-
-create table regiao (
+﻿create table regiao (
     CO_REGIAO integer primary key
 );
 
@@ -163,6 +160,31 @@ create table aluno (
     IN_TGD_SINDROME_RETT boolean,
     IN_TGD_TRANSTOR_DESINTEGRATIVO boolean,
     TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer
+);
+
+CREATE TABLE OCDE_AREA_GERAL (
+   co_ocde_area_geral CHAR(1) PRIMARY KEY,
+   no_ocde_area_geral VARCHAR(36)
+);
+
+CREATE TABLE OCDE_AREA_ESPECIFICA (
+   co_ocde_area_especifica CHAR(2) PRIMARY KEY,
+   no_ocde_area_especifica VARCHAR(44),
+   co_ocde_area_geral CHAR(1) REFERENCES OCDE_AREA_GERAL(co_ocde_area_geral)
+);
+
+CREATE TABLE OCDE_AREA_DETALHADA (
+   co_ocde_area_detalhada CHAR(3) PRIMARY KEY,
+   no_ocde_area_detalhada VARCHAR(64),
+   co_ocde_area_especifica CHAR(2) REFERENCES OCDE_AREA_ESPECIFICA(co_ocde_area_especifica)
+);
+
+CREATE TABLE OCDE (
+  NU_ANO_CENSO SMALLINT,
+  CO_OCDE_AREA_DETALHADA CHAR(3) REFERENCES OCDE_AREA_DETALHADA(CO_OCDE_AREA_DETALHADA),
+  CO_OCDE CHAR(6),
+  NO_OCDE VARCHAR(83),
+  PRIMARY KEY (NU_ANO_CENSO,CO_OCDE)
 );
 
 create table curso (
@@ -341,82 +363,7 @@ create table aluno_curso (
     TP_MOBILIDADE_ACADEMICA_INTERN integer
 );
 
----------------------------------------------------------OCDE---------------------------------------------------------------------
-
-CREATE TABLE OCDE_AREA_GERAL (
-   co_ocde_area_geral CHAR(1) PRIMARY KEY,
-   no_ocde_area_geral VARCHAR(36)
+CREATE TABLE pais (
+    CO_PAIS integer primary key,
+    NO_PAIS varchar(83)
 );
-
-CREATE TABLE OCDE_AREA_ESPECIFICA (
-   co_ocde_area_especifica CHAR(2) PRIMARY KEY,
-   no_ocde_area_especifica VARCHAR(44),
-   co_ocde_area_geral CHAR(1) REFERENCES OCDE_AREA_GERAL(co_ocde_area_geral)
-);
-
-CREATE TABLE OCDE_AREA_DETALHADA (
-   co_ocde_area_detalhada CHAR(3) PRIMARY KEY,
-   no_ocde_area_detalhada VARCHAR(64),
-   co_ocde_area_especifica CHAR(2) REFERENCES OCDE_AREA_ESPECIFICA(co_ocde_area_especifica)
-);
-
-CREATE TABLE OCDE (
-  NU_ANO_CENSO SMALLINT,
-  CO_OCDE_AREA_DETALHADA CHAR(3) REFERENCES OCDE_AREA_DETALHADA(CO_OCDE_AREA_DETALHADA),
-  CO_OCDE CHAR(6),
-  NO_OCDE VARCHAR(83),
-  PRIMARY KEY (NU_ANO_CENSO,CO_OCDE)
-);
-
-CREATE TABLE OCDE_TEMP (
-  NU_ANO_CENSO SMALLINT,
-  CO_OCDE_AREA_GERAL CHAR(1),
-  NO_OCDE_AREA_GERAL VARCHAR(36),
-  CO_OCDE_AREA_ESPECIFICA CHAR(2),
-  NO_OCDE_AREA_ESPECIFICA VARCHAR(44),
-  CO_OCDE_AREA_DETALHADA CHAR(3),
-  NO_OCDE_AREA_DETALHADA VARCHAR(64),
-  CO_OCDE CHAR(6),
-  NO_OCDE VARCHAR(83)
-);
-
-------------------------------------------INSERINDO VALORES----------------------------------------------
-----------------------------OCDE-------------------------------
-INSERT INTO OCDE_AREA_GERAL( CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL)
-SELECT DISTINCT CO_OCDE_AREA_GERAL, NO_OCDE_AREA_GERAL FROM ocde_temp
-ORDER BY CO_OCDE_AREA_GERAL;
-
-INSERT INTO OCDE_AREA_ESPECIFICA(CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL)
-SELECT DISTINCT CO_OCDE_AREA_ESPECIFICA,  NO_OCDE_AREA_ESPECIFICA, CO_OCDE_AREA_GERAL FROM ocde_temp
-ORDER BY CO_OCDE_AREA_ESPECIFICA;
-
-INSERT INTO OCDE_AREA_DETALHADA(CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA )
-SELECT DISTINCT CO_OCDE_AREA_DETALHADA,  NO_OCDE_AREA_DETALHADA, CO_OCDE_AREA_ESPECIFICA FROM ocde_temp
-ORDER BY CO_OCDE_AREA_ESPECIFICA;
-
-INSERT INTO OCDE(CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO)
-SELECT DISTINCT CO_OCDE, NO_OCDE, CO_OCDE_AREA_DETALHADA, NU_ANO_CENSO FROM ocde_temp
-ORDER BY CO_OCDE;
-
-------------------------REGIAO, UF e MUNICIPIO-------------------------------
-insert into regiao values (1),(2),(3),(4),(5);
-
-INSERT INTO uf ( CO_UF, CO_REGIAO)
-SELECT DISTINCT CO_UF, CO_REGIAO FROM ies_temp;
-
-create table aux_insert_municipio (
-    id serial primary key,
-    CO_MUNICIPIO integer,
-    CO_UF integer,
-    IN_CAPITAL boolean,
-    CO_REGIAO integer
-);
-
---INSERT INTO aux_insert_municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL)
---            SELECT DISTINCT CO_MUNICIPIO, CO_UF, cast(IN_CAPITAL AS boolean) AS boolean FROM [ies_temp, curso_temp, local_oferta_temp];
-
---update aux_insert_municipio as ax SET co_regiao = (select co_regiao from uf as u where u.co_uf = ax.co_uf);
-
---INSERT INTO municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO)
---            SELECT DISTINCT CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO FROM aux_insert_municipio;
-
