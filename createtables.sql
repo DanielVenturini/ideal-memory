@@ -35,10 +35,10 @@ create table ies (
     TP_CATEGORIA_ADMINISTRATIVA integer,
     TP_ORGANIZACAO_ACADEMICA integer,
 
-    CO_MUNICIPIO_NASCIMENTO integer,
+    CO_MUNICIPIO integer,
     CO_REGIAO integer,
     CO_UF integer,
-    foreign key (CO_MUNICIPIO_NASCIMENTO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
+    foreign key (CO_MUNICIPIO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
 
     QT_TEC_TOTAL integer,
     QT_TEC_FUNDAMENTAL_INCOMP_FEM integer,
@@ -133,7 +133,9 @@ create table docente_ies (
 
 create table aluno (
     CO_MUNICIPIO_NASCIMENTO integer,
-    foreign key (CO_MUNICIPIO_NASCIMENTO) references municipio (CO_MUNICIPIO),
+    CO_REGIAO integer,
+    CO_UF integer,
+    foreign key (CO_MUNICIPIO_NASCIMENTO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
 
     CO_ALUNO bigint,
     primary key (CO_ALUNO),
@@ -160,22 +162,16 @@ create table aluno (
     IN_TGD_SINDROME_ASPERGER boolean,
     IN_TGD_SINDROME_RETT boolean,
     IN_TGD_TRANSTOR_DESINTEGRATIVO boolean,
-    TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer,
-    IN_ALUNO_PARFOR boolean,
-    IN_MOBILIDADE_ACADEMICA boolean,
-    TP_MOBILIDADE_ACADEMICA integer,
-    TP_MOBILIDADE_ACADEMICA_INTERN integer,
-    CO_IES_DESTINO integer,
-    CO_PAIS_DESTINO integer
+    TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer
 );
 
 create table curso (
-
-    CO_MUNICIPIO integer,
-    foreign key (CO_MUNICIPIO) references municipio(CO_MUNICIPIO),
-
     CO_CURSO integer,
     primary key(CO_CURSO),
+
+    NU_ANO_CENSO SMALLINT,
+    CO_OCDE varchar(6),
+    foreign key (CO_OCDE, NU_ANO_CENSO) references ocde (CO_OCDE, NU_ANO_CENSO),
 
     NO_CURSO varchar(200),
     TP_SITUACAO integer,
@@ -241,22 +237,20 @@ create table curso (
     QT_INSC_ANUAL_MATUTINO integer,
     QT_INSC_ANUAL_VESPERTINO integer,
     QT_INSC_ANUAL_NOTURNO integer,
-    QT_INSC_ANUAL_EAD integer,
-    VL_DESPESA_INVESTIMENTO float,
-    VL_DESPESA_PESQUISA float,
-    VL_DESPESA_OUTRA float
+    QT_INSC_ANUAL_EAD integer
 );
 
 create table local_oferta(
     CO_MUNICIPIO integer,
-    foreign key (CO_MUNICIPIO) references municipio(CO_MUNICIPIO),
+    CO_REGIAO integer,
+    CO_UF integer,
+    foreign key (CO_MUNICIPIO, CO_REGIAO, CO_UF) references municipio (CO_MUNICIPIO, CO_REGIAO, CO_UF),
         
     CO_LOCAL_OFERTA integer,
     primary key (CO_LOCAL_OFERTA),
 
     NO_LOCAL_OFERTA varchar(255),
     IN_SEDE boolean,
-    CO_CURSO_POLO integer,
     IN_LOCAL_OFERTA_NEAD boolean,
     IN_LOCAL_OFERTA_UAB boolean,
     IN_LOCAL_OFERTA_REITORIA boolean,
@@ -299,6 +293,15 @@ create table local_oferta(
     IN_SALA_ATENDIMENTO_TUTOR boolean
 );
 
+create table curso_polo(
+    CO_CURSO_POLO integer,
+    CO_CURSO integer,
+    CO_LOCAL_OFERTA integer NOT NULL,
+    foreign key (CO_CURSO) references curso(CO_CURSO),
+    foreign key (CO_LOCAL_OFERTA) references local_oferta(CO_LOCAL_OFERTA),
+    primary key (CO_CURSO,CO_LOCAL_OFERTA)
+);
+
 create table curso_ies(
     CO_CURSO integer,
     CO_IES integer,
@@ -307,23 +310,11 @@ create table curso_ies(
     primary key (CO_CURSO, CO_IES)
 );
 
-create table curso_local(
-    CO_CURSO integer,
-    CO_LOCAL_OFERTA integer,
-    foreign key (CO_CURSO) references curso(CO_CURSO),
-    foreign key (CO_LOCAL_OFERTA) references local_oferta(CO_LOCAL_OFERTA),
-    primary key (CO_CURSO, CO_LOCAL_OFERTA)
-);
-
 create table aluno_curso (
     CO_ALUNO bigint,
-    foreign key(CO_ALUNO) references aluno(CO_ALUNO),
     CO_CURSO integer,
-    foreign key(CO_CURSO) references curso(CO_CURSO),
-
     CO_ALUNO_CURSO integer,
     CO_ALUNO_CURSO_ORIGEM integer,
-
     TP_SITUACAO integer,
     QT_CARGA_HORARIA_TOTAL integer,
     QT_CARGA_HORARIA_INTEG integer,
@@ -345,28 +336,9 @@ create table aluno_curso (
     IN_RESERVA_DEFICIENCIA boolean,
     IN_RESERVA_ENSINO_PUBLICO boolean,
     IN_RESERVA_RENDA_FAMILIAR boolean,
-    IN_RESTAURANTE_UNIVERSITARIO boolean,
-    IN_QUADRA_POLIESPORTIVA boolean,
-    IN_PISCINA boolean,
-    IN_QUADRA_COBERTA_GINASIO boolean,
-    IN_CINEMA boolean,
-    IN_VESTIARIO boolean,
-    IN_SERVICOS boolean,
-    IN_ESTACIONAMENTO_DOCENTE boolean,
-    IN_CANTINA_LANCHONETE boolean,
-    IN_PISTA_ATLETISMO boolean,
-    IN_CAMPO_PRATICA_ESPORTIVA boolean,
-    IN_AUDITORIO_TEATRO boolean,
-    IN_REDE_SEM_FIO_COMU_ACADEMICA boolean,
-    IN_POSTO_ATENDIMENTO_1_SOCORRO boolean,
-    IN_BICICLETARIO boolean,
-    IN_ESTACIONAMENTO_ALUNO boolean,
-    IN_MORADIA_ESTUDANTIL boolean,
-    IN_EQUIPA_VIDEOCONFERENCIA boolean,
-    IN_SALA_COORDENACAO_POLO boolean,
-    IN_MICROCOMPUTADOR boolean,
-    IN_POSSUI_INTERNET_BANDA_LARGA boolean,
-    IN_SALA_ATENDIMENTO_TUTOR boolean
+    IN_MOBILIDADE_ACADEMICA boolean,
+    TP_MOBILIDADE_ACADEMICA integer,
+    TP_MOBILIDADE_ACADEMICA_INTERN integer
 );
 
 ---------------------------------------------------------OCDE---------------------------------------------------------------------
