@@ -57,13 +57,26 @@ insert into TP_DEFICIENCIA values
 (1, $$Sim$$),
 (9, $$Não dispõe de informação (Não resposta)$$);
 
-insert into TP_SITUACAO values
+insert into TP_SITUACAO_ALUNO values
 (2, $$Cursando$$),
 (3, $$Matrícula trancada$$),
 (4, $$Desvinculado do curso$$),
 (5, $$Transferido para outro curso da mesma IES$$),
 (6, $$Formado$$),
 (7, $$Falecido$$);
+
+insert into TP_SITUACAO_DOCENTE values
+(1, $$Em exercício$$),
+(2, $$Afastado para qualificação$$),
+(3, $$Afastado para exercício em outros órgãos/entidades$$),
+(4, $$Afastado por outros motivos$$),
+(5, $$Afastado para tratamento de saúde$$),
+(6, $$Falecido$$);
+
+insert into TP_SITUACAO_CURSO values
+(1, $$Em atividade$$),
+(2, $$Extinto$$),
+(3, $$Em extinção$$);
 
 insert into TP_ESCOLA_CONCLUSAO_ENS_MEDIO values
 (1, $$Pública$$),

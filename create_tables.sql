@@ -30,7 +30,9 @@ create table ies (
     CO_MANTENEDORA integer,
     NO_MANTENEDORA varchar(200),
     TP_CATEGORIA_ADMINISTRATIVA integer,
+    foreign key (TP_CATEGORIA_ADMINISTRATIVA) references TP_CATEGORIA_ADMINISTRATIVA(codigo),
     TP_ORGANIZACAO_ACADEMICA integer,
+    foreign key (TP_ORGANIZACAO_ACADEMICA) references TP_ORGANIZACAO_ACADEMICA(codigo),
 
     CO_MUNICIPIO integer,
     CO_REGIAO integer,
@@ -62,6 +64,7 @@ create table ies (
     QT_PERIODICO_ELETRONICO integer,
     QT_LIVRO_ELETRONICO integer,
     TP_REFERENTE integer,
+    foreign key (TP_REFERENTE) references TP_REFERENTE(codigo),
     VL_RECEITA_PROPRIA float,
     VL_RECEITA_TRANSFERENCIA float,
     VL_RECEITA_OUTRA float,
@@ -84,14 +87,18 @@ create table docente (
     primary key (CO_DOCENTE),
 
     TP_SEXO integer,
+    foreign key (TP_SEXO) references TP_SEXO(codigo),
     NU_ANO_NASCIMENTO integer,
     NU_MES_NASCIMENTO integer,
     NU_DIA_NASCIMENTO integer,
     NU_IDADE integer,
     TP_COR_RACA integer,
+    foreign key (TP_COR_RACA) references TP_COR_RACA(codigo),
     CO_PAIS_ORIGEM integer,
     TP_NACIONALIDADE integer,
+    foreign key (TP_NACIONALIDADE) references TP_NACIONALIDADE(codigo),
     TP_DEFICIENCIA integer,
+    foreign key (TP_DEFICIENCIA) references TP_DEFICIENCIA(codigo),
     IN_DEFICIENCIA_CEGUEIRA boolean,
     IN_DEFICIENCIA_BAIXA_VISAO boolean,
     IN_DEFICIENCIA_SURDEZ boolean,
@@ -111,8 +118,11 @@ create table docente_ies (
 
     CO_DOCENTE_IES bigint primary key,
     TP_ESCOLARIDADE integer,
+    foreign key (TP_ESCOLARIDADE) references TP_ESCOLARIDADE(codigo),
     TP_SITUACAO integer,
+    foreign key (TP_SITUACAO) references TP_SITUACAO_DOCENTE(codigo),
     TP_REGIME_TRABALHO integer,
+    foreign key (TP_REGIME_TRABALHO) references TP_REGIME_TRABALHO(codigo),
     IN_ATUACAO_EAD boolean,
     IN_ATUACAO_EXTENSAO boolean,
     IN_ATUACAO_GESTAO boolean ,
@@ -125,7 +135,8 @@ create table docente_ies (
     IN_SUBSTITUTO boolean,
     IN_EXERCICIO_DATA_REFERENCIA boolean,
     IN_VISITANTE boolean,
-    TP_VISITANTE_IFES_VINCULO integer
+    TP_VISITANTE_IFES_VINCULO integer,
+    foreign key (TP_VISITANTE_IFES_VINCULO) references TP_VISITANTE_IFES_VINCULO(codigo)
 );
 
 create table aluno (
@@ -138,14 +149,18 @@ create table aluno (
     primary key (CO_ALUNO),
 
     TP_COR_RACA integer,
+    foreign key (TP_COR_RACA) references TP_COR_RACA(codigo),
     TP_SEXO integer,
+    foreign key (TP_SEXO) references TP_SEXO(codigo),
     NU_ANO_NASCIMENTO integer,
     NU_MES_NASCIMENTO integer,
     NU_DIA_NASCIMENTO integer,
     NU_IDADE integer,
     TP_NACIONALIDADE integer,
+    foreign key (TP_NACIONALIDADE) references TP_NACIONALIDADE(codigo),
     CO_PAIS_ORIGEM integer,
     TP_DEFICIENCIA integer,
+    foreign key (TP_DEFICIENCIA) references TP_DEFICIENCIA(codigo),
     IN_DEFICIENCIA_AUDITIVA boolean,
     IN_DEFICIENCIA_FISICA boolean,
     IN_DEFICIENCIA_INTELECTUAL boolean,
@@ -159,7 +174,8 @@ create table aluno (
     IN_TGD_SINDROME_ASPERGER boolean,
     IN_TGD_SINDROME_RETT boolean,
     IN_TGD_TRANSTOR_DESINTEGRATIVO boolean,
-    TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer
+    TP_ESCOLA_CONCLUSAO_ENS_MEDIO integer,
+    foreign key (TP_ESCOLA_CONCLUSAO_ENS_MEDIO) references TP_ESCOLA_CONCLUSAO_ENS_MEDIO(codigo)
 );
 
 CREATE TABLE OCDE_AREA_GERAL (
@@ -197,11 +213,16 @@ create table curso (
 
     NO_CURSO varchar(200),
     TP_SITUACAO integer,
+    foreign key (TP_SITUACAO) references TP_SITUACAO_CURSO(codigo),
     TP_GRAU_ACADEMICO integer,
+    foreign key (TP_GRAU_ACADEMICO) references TP_GRAU_ACADEMICO(codigo),
     TP_MODALIDADE_ENSINO integer,
+    foreign key (TP_MODALIDADE_ENSINO) references TP_MODALIDADE_ENSINO(codigo),
     TP_NIVEL_ACADEMICO integer,
+    foreign key (TP_NIVEL_ACADEMICO) references TP_NIVEL_ACADEMICO(codigo),
     IN_GRATUITO boolean,
     TP_ATRIBUTO_INGRESSO integer,
+    foreign key (TP_ATRIBUTO_INGRESSO) references TP_ATRIBUTO_INGRESSO(codigo),
     NU_CARGA_HORARIA integer,
     DT_INICIO_FUNCIONAMENTO varchar(10),
     DT_AUTORIZACAO_CURSO varchar(10),
@@ -374,6 +395,7 @@ create table aluno_curso (
     CO_ALUNO_CURSO integer,
     CO_ALUNO_CURSO_ORIGEM integer,
     TP_SITUACAO integer,
+    foreign key (TP_SITUACAO) references TP_SITUACAO_ALUNO(codigo),
     QT_CARGA_HORARIA_TOTAL integer,
     QT_CARGA_HORARIA_INTEG integer,
     DT_INGRESSO_CURSO varchar(10),
@@ -396,7 +418,9 @@ create table aluno_curso (
     IN_RESERVA_RENDA_FAMILIAR boolean,
     IN_MOBILIDADE_ACADEMICA boolean,
     TP_MOBILIDADE_ACADEMICA integer,
-    TP_MOBILIDADE_ACADEMICA_INTERN integer
+    foreign key (TP_MOBILIDADE_ACADEMICA) references TP_MOBILIDADE_ACADEMICA(codigo),
+    TP_MOBILIDADE_ACADEMICA_INTERN integer,
+    foreign key (TP_MOBILIDADE_ACADEMICA_INTERN) references TP_MOBILIDADE_ACADEMICA_INTERN(codigo)
 );
 
 CREATE TABLE pais (

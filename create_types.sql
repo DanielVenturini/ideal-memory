@@ -68,9 +68,23 @@ create table TP_DEFICIENCIA (
     nome varchar(200)
 );
 
-drop table if exists TP_SITUACAO;
+drop table if exists TP_SITUACAO_ALUNO;
 
-create table TP_SITUACAO (
+create table TP_SITUACAO_ALUNO (
+    codigo integer primary key,
+    nome varchar(200)
+);
+
+drop table if exists TP_SITUACAO_DOCENTE;
+
+create table TP_SITUACAO_DOCENTE (
+    codigo integer primary key,
+    nome varchar(200)
+);
+
+drop table if exists TP_SITUACAO_CURSO;
+
+create table TP_SITUACAO_CURSO (
     codigo integer primary key,
     nome varchar(200)
 );
