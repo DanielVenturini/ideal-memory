@@ -288,8 +288,6 @@ UPDATE municipio_temp AS mt SET co_regiao = (SELECT co_regiao FROM uf AS u WHERE
 INSERT INTO municipio (CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO)
     SELECT DISTINCT CO_MUNICIPIO, CO_UF, IN_CAPITAL, CO_REGIAO FROM municipio_temp AS mt WHERE mt.co_municipio IS NOT NULL AND mt.co_uf IS NOT NULL AND mt.in_capital IS NOT NULL AND mt.co_regiao IS NOT NULL;
 
-DROP TABLE municipio_temp;
-
 INSERT INTO docente (
     CO_MUNICIPIO_NASCIMENTO,
     CO_DOCENTE,
@@ -334,8 +332,6 @@ from docente_temp;
 
 UPDATE docente AS dc SET co_regiao = (SELECT co_regiao FROM municipio AS m WHERE m.co_municipio = dc.co_municipio_nascimento);
 UPDATE docente AS dc SET co_uf = (SELECT co_uf FROM municipio AS m WHERE m.co_municipio = dc.co_municipio_nascimento);
-
-DROP TABLE docente_temp;
 
 INSERT INTO ies (
     CO_IES,
@@ -431,8 +427,6 @@ INSERT INTO ies (
     VL_DESPESA_OUTRA
 FROM ies_temp;
 
-DROP TABLE ies_temp;
-
 INSERT INTO docente_ies (
     CO_DOCENTE,
     CO_IES,
@@ -474,8 +468,6 @@ INSERT INTO docente_ies (
     IN_VISITANTE,
     TP_VISITANTE_IFES_VINCULO
 FROM docente_temp;
-
-DROP TABLE docente_temp;
 
 INSERT INTO local_oferta (
     CO_MUNICIPIO,
@@ -572,8 +564,6 @@ INSERT INTO local_oferta (
 FROM local_oferta_temp;
 
 UPDATE local_oferta AS lo SET co_regiao = (SELECT co_regiao FROM municipio AS m WHERE m.co_municipio = lo.co_municipio);
-
-DROP TABLE local_oferta_temp;
 
 INSERT INTO curso (
     CO_CURSO,
@@ -787,8 +777,6 @@ INSERT INTO curso (
     QT_VAGA_TOTAL
 FROM curso_temp;
 
-DROP TABLE curso_temp;
-
 INSERT INTO curso_polo(
     CO_CURSO_POLO,
     CO_CURSO,
@@ -798,8 +786,6 @@ INSERT INTO curso_polo(
     CO_CURSO,
     CO_LOCAL_OFERTA
 FROM local_oferta_temp;
-
-DROP TABLE local_oferta_temp;
 
 INSERT INTO curso_ies (
     CO_CURSO,
@@ -923,6 +909,13 @@ INSERT INTO aluno (
     IN_TGD_TRANSTOR_DESINTEGRATIVO
 from aluno_temp;
 
-DROP TABLE aluno_temp;
-
 UPDATE aluno AS a SET co_regiao = (SELECT co_regiao FROM municipio AS m WHERE m.co_municipio = a.co_municipio_nascimento);
+
+DROP TABLE municipio_temp;
+DROP TABLE docente_temp;
+DROP TABLE ies_temp;
+DROP TABLE docente_temp;
+DROP TABLE local_oferta_temp;
+DROP TABLE curso_temp;
+DROP TABLE local_oferta_temp;
+DROP TABLE aluno_temp;
