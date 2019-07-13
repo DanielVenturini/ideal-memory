@@ -16,7 +16,7 @@ One important file is `ANEXOS/ANEXO I - Dicion rio de Dados e Tabelas Auxiliare
 ## Modeling
 This is the modeling that how all data are structured.
 
-![Diagram(https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/diagram.jpeg)
+![Diagram](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/diagram.jpeg)
 
 ## Execute
 The nexts steps describe how to create all environment.
