@@ -8,13 +8,15 @@ All database from `Inep` can be downloaded [here](download.inep.gov.br/microdado
 The files is structured the follow way:
  - `ANEXOS/` contains all files that describe the datas;
  - `DADOS/` contains all database files in `zip->csv`;
- - `FILTROS` contains one file with some tips of how to model in `Sql`; and
- - `LEIA-ME` contains a file that explain how to open the database files in software `R`, `SPSS` and `SAS`.
+ - `FILTROS/` contains one file with some tips of how to model in `Sql`; and
+ - `LEIA-ME/` contains a file that explain how to open the database files in software `R`, `SPSS` and `SAS`.
 
 One important file is `ANEXOS/ANEXO I - Dicion rio de Dados e Tabelas Auxiliares/Dicion rio_de_Dados.xlsx` that contains the description of each field in all database.
 
 ## Modeling
+This is the modeling that how all data are structured.
 
+![Diagram(https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/diagram.jpeg)
 
 ## Execute
 The nexts steps describe how to create all environment.
@@ -37,14 +39,17 @@ Using the `PostgreSQL`, execute the query files in the follow order:
 
 1. [create_types.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/create_types.sql)
 2. [insert_types.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/insert_types.sql)
-3. [create_tables.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/create_tables.sql)
-4.  [create_temps.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/create_temps.sql)
+3.  [create_temps.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/create_temps.sql)
 > before execute this file  - `create_temps.sql` -, open at line `406-411` and change the `/[absolute/path]/` to your absolute path.
+4. [create_tables.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/create_tables.sql)
 5. [insert_tables.sql](https://raw.githubusercontent.com/DanielVenturini/ideal-memory/master/insert_tables.sql)
 
-Before the execution files, you can use the follow command:
+**Tip:** Before the execution files, you can use the follow command:
 
 ```SQL
 drop schema if exists public cascade;
 create schema public;
 ```
+
+## Observation
+The `DM_CURSO.csv` file contains unique wrong register. At line `6302` and column `T`, exists a wrong value in `TP_ATRIBUTO_INGRESSO` that doesn't exists in table `TP_ATRIBUTO_INGRESSO`. All values from this table is `0`, `1` and `2`; and the value at line `6302` is `3`. For this, in file `create_temps`, at last line, this register is deleted from the `curso_temp`.
