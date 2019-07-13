@@ -409,3 +409,5 @@ COPY curso_temp        FROM '/[absolute/path]/ideal-memory/microdados/DADOS/DM_C
 COPY local_oferta_temp FROM '/[absolute/path]/ideal-memory/microdados/DADOS/DM_LOCAL_OFERTA.CSV' USING delimiters '|' CSV HEADER NULL AS ''  encoding 'latin1';
 COPY ocde_temp         FROM '/[absolute/path]/ideal-memory/microdados/DADOS/TB_AUX_AREA_OCDE.CSV' USING delimiters '|' CSV HEADER NULL AS ''  encoding 'latin1';
 COPY docente_temp      FROM '/[absolute/path]/ideal-memory/microdados/DADOS/DM_DOCENTE.CSV' USING delimiters '|' CSV HEADER NULL AS ''  encoding 'latin1';
+
+DELETE FROM curso_temp WHERE TP_ATRIBUTO_INGRESSO = 3;

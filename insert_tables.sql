@@ -914,8 +914,6 @@ UPDATE aluno AS a SET co_regiao = (SELECT co_regiao FROM municipio AS m WHERE m.
 DROP TABLE municipio_temp;
 DROP TABLE docente_temp;
 DROP TABLE ies_temp;
-DROP TABLE docente_temp;
-DROP TABLE local_oferta_temp;
 DROP TABLE curso_temp;
 DROP TABLE local_oferta_temp;
 DROP TABLE aluno_temp;
