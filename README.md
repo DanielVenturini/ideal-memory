@@ -52,4 +52,6 @@ create schema public;
 ```
 
 ## Observation
-The `DM_CURSO.csv` file contains unique wrong register. At line `6302` and column `T`, exists a wrong value in `TP_ATRIBUTO_INGRESSO` that doesn't exists in table `TP_ATRIBUTO_INGRESSO`. All values from this table is `0`, `1` and `2`; and the value at line `6302` is `3`. For this, in file `create_temps`, at last line, this register is deleted from the `curso_temp`.
+1. The `DM_CURSO.csv` file contains unique wrong register. At line `6302` and column `T`, exists a wrong value in `TP_ATRIBUTO_INGRESSO` that doesn't exists in table `TP_ATRIBUTO_INGRESSO`. All values from this table is `0`, `1` and `2`; and the value at line `6302` is `3`. For this, in file `create_temps`, at last line, this register is deleted from the `curso_temp`.
+
+2. The file `insert_tables.sql` has a `UPDATE` that take many, many, many hours: [line 995](https://github.com/DanielVenturini/ideal-memory/blob/master/insert_tables.sql#L995)
